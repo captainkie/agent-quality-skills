@@ -27,6 +27,16 @@ Fill in all six, or it is not a security finding:
 | **affected principal or resource** | whose data or capability moves |
 | **observed or owner-observable result** | what actually happens — not what could |
 
+### The six rows are the bar for CONFIRMING — rejecting takes one line
+
+**To reject a candidate, ask one question: name the lower-trust principal and
+what they gain.** If you cannot, it is a hardening note. Stop there.
+
+The table is what a **confirmed** finding must carry, and that is where it earns
+its cost — somebody is going to act on the answer. Filling six rows in order to
+throw a candidate away is heavier than the throwing-away deserves, and a rule
+that costs more than it returns is one people quietly stop using.
+
 ### What this excludes, on purpose
 
 - **A missing best practice with no principal and no crossed boundary.** "Tokens are
@@ -66,6 +76,12 @@ A `needs-validation` entry must carry:
 
 **Write it down even when you cannot resolve it.** An unrecorded question comes back
 as an incident; a recorded one comes back as a task.
+
+⚠️ **Print the `needs-validation` section only when it has something in it** —
+except on a diff touching infrastructure, configuration or deployment, where it
+is mandatory even as "None.", because that is where the outside-the-repo facts
+live and "None." is then a real statement. Elsewhere a standing empty heading
+trains readers to skip the section, which defeats the rule it exists to serve.
 
 ---
 

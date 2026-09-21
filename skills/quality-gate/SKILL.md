@@ -152,6 +152,9 @@ you are about to write is a finding at all. Three rules:
    or action · intended control · crossed boundary · affected principal or resource ·
    observed or owner-observable result. A missing best practice with no principal and
    no crossed boundary is a hardening note, not a security finding.
+   ⚠️ **The six rows are the bar for CONFIRMING. To REJECT, one line is enough — name
+   the lower-trust principal and what they gain; if you cannot, stop there.** Spending
+   the whole table to say something is not a finding is ceremony.
 2. **`needs-validation` is a state, and it carries no severity.** When the decisive
    fact is outside the repository — a proxy header, an IAM policy, a provider default,
    live configuration — say so with the exact missing fact and a safe way to check it.
@@ -229,7 +232,9 @@ Always produce exactly this structure:
 ## 🔍 Needs validation  (no severity — the decisive fact is outside the repo)
 - `path/file.ts:NN` — <source-grounded hypothesis>, blocked on <exact missing fact>.
   Check by: <safe owner-observable or local step>.
-<or> None.
+<omit this section when empty — EXCEPT on a diff touching infrastructure, configuration
+or deployment, where it is mandatory even as "None.". A heading that is always empty
+trains readers to skip it.>
 
 ## Auto-fixes applied
 <or> None.
