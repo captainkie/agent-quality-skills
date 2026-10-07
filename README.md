@@ -16,6 +16,26 @@ it does not modify source. Neither replaces the other.
 ## Install
 
 ```bash
+npx skills add captainkie/agent-quality-skills        # the gate
+npx skills add cloudflare/security-audit-skill        # the audit, from upstream
+```
+
+This uses the [skills CLI](https://skills.sh). It detects your agents (Claude Code,
+Cursor, Codex, and others) and asks where to install. Common variants:
+
+```bash
+npx skills add captainkie/agent-quality-skills -g     # user-level, every project
+npx skills add captainkie/agent-quality-skills -a claude-code -g -y
+npx skills update quality-gate                        # pull the latest version
+npx skills remove quality-gate
+```
+
+### Without npx
+
+`install.sh` installs both skills in one command, for machines without Node or when you
+want both together:
+
+```bash
 curl -fsSL https://raw.githubusercontent.com/captainkie/agent-quality-skills/main/install.sh | bash
 ```
 
