@@ -285,6 +285,22 @@ The evidence contract's three rules are adapted from Cloudflare's `security-audi
 skill (MIT). That skill is fetched from upstream at install time rather than vendored,
 so it stays current and its licence and attribution travel with its own files.
 
+## Releasing
+
+Releases go to npm from GitHub Actions (`.github/workflows/release.yml`), with
+[provenance](https://docs.npmjs.com/generating-provenance-statements), so every
+published version links back to the commit that built it.
+
+```bash
+npm version patch          # or minor / major: bumps package.json and creates the tag
+git push --follow-tags     # the v* tag triggers the release
+```
+
+The workflow refuses a tag that does not match `package.json`, checks that every
+skill's `name` matches its directory, and installs from the packed tarball before it
+publishes. Auth is npm trusted publishing (OIDC). A `NPM_TOKEN` secret in the `npm`
+environment works as a fallback.
+
 ## Licence
 
 MIT. See [`LICENSE`](LICENSE).

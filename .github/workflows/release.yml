@@ -1,0 +1,71 @@
+name: Release
+
+# Publishes to npm when a `v*` tag is pushed. Releasing is a person's decision:
+# bump `version` in package.json, commit, then `git tag vX.Y.Z && git push --tags`.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Needed for npm trusted publishing (OIDC) and for --provenance. Without it npm
+  # rejects the attestation with a message that never mentions this permission.
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1; Node 22 ships an older npm.
+      - run: npm install -g npm@latest
+
+      # A tag that disagrees with package.json would publish a version nobody tagged.
+      - name: Tag matches package.json version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          v="v$(node -p "require('./package.json').version")"
+          if [ "$v" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json $v"
+            exit 1
+          fi
+
+      # Every skill's frontmatter name must equal its directory, or `npx skills add`
+      # and the agent disagree on what the skill is called.
+      - name: Skill names match their directories
+        run: |
+          node -e '
+            const fs = require("fs");
+            let bad = 0;
+            for (const d of fs.readdirSync("skills")) {
+              const md = fs.readFileSync(`skills/${d}/SKILL.md`, "utf8");
+              const name = (md.match(/^name:\s*(.+)$/m) || [])[1]?.trim();
+              if (name !== d) { console.error(`::error::skills/${d}/SKILL.md name is "${name}"`); bad = 1; }
+            }
+            process.exit(bad);
+          '
+
+      # Install from the packed tarball, exactly what npm will serve.
+      - name: Installer works from the tarball
+        run: |
+          node --check bin/install.js
+          npm pack --silent
+          dest="$RUNNER_TEMP/skills"
+          npx --yes --package="./$(ls *.tgz)" $(node -p "Object.keys(require('./package.json').bin)[0]") --gate-only --dir "$dest"
+          test -f "$dest/quality-gate/SKILL.md"
+          rm -f *.tgz
+
+      # Trusted publishing (OIDC) is used when it is configured for this package on
+      # npmjs.com. Otherwise npm falls back to the NPM_TOKEN secret, if one is set.
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
