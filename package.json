@@ -1,6 +1,6 @@
 {
   "name": "agent-quality-skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pre-ship quality gate skill for coding agents, with an evidence contract for security findings — installs alongside Cloudflare's security-audit skill",
   "bin": {
     "agent-quality-skills": "bin/install.js"
@@ -10,7 +10,15 @@
     "skills",
     "templates"
   ],
-  "keywords": ["agent-skills", "claude-code", "skills", "code-review", "quality-gate", "security-review", "ai-agent"],
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "skills",
+    "code-review",
+    "quality-gate",
+    "security-review",
+    "ai-agent"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/captainkie/agent-quality-skills.git"
