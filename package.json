@@ -1,0 +1,25 @@
+{
+  "name": "agent-quality-skills",
+  "version": "1.0.0",
+  "description": "Pre-ship quality gate skill for coding agents, with an evidence contract for security findings — installs alongside Cloudflare's security-audit skill",
+  "bin": {
+    "agent-quality-skills": "bin/install.js"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "templates"
+  ],
+  "keywords": ["agent-skills", "claude-code", "skills", "code-review", "quality-gate", "security-review", "ai-agent"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/captainkie/agent-quality-skills.git"
+  },
+  "homepage": "https://github.com/captainkie/agent-quality-skills#readme",
+  "bugs": "https://github.com/captainkie/agent-quality-skills/issues",
+  "author": "Narenrit Hadsadintorn",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17"
+  }
+}
